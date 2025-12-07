@@ -12,7 +12,7 @@ public static class Pathfinder
         public Node(Vector2 p) { pos = p; g = float.PositiveInfinity; f = float.PositiveInfinity; parent = null; }
     }
 
-    // Возвращает список мировых точек (пустой список = путь не найден)
+    // Given start and goal world positions, returns a list of waypoints from start to goal
     public static List<Vector2> FindPath(Vector2 startWorld, Vector2 goalWorld)
     {
         if (GridMap.Instance == null) return new List<Vector2>();
@@ -22,7 +22,7 @@ public static class Pathfinder
 
         if (!GridMap.Instance.IsWalkable(start)) 
         {
-            // Попробуем найти ближайшую проходимую клетку вокруг стартовой
+            // When start is not walkable, try to find the nearest walkable cell
             start = FindNearbyWalkable(start);
             if (start == Vector2.positiveInfinity) return new List<Vector2>();
         }
@@ -40,7 +40,7 @@ public static class Pathfinder
 
         while (open.Count > 0)
         {
-            // выбрать узел с минимальным f
+            // Find node in open list with lowest f
             Node current = open[0];
             for (int i = 1; i < open.Count; i++)
                 if (open[i].f < current.f) current = open[i];
@@ -82,12 +82,12 @@ public static class Pathfinder
             cur = cur.parent;
         }
         path.Reverse();
-        // Опционально: упрощение пути (удалить промежуточные точки в одной прямой)
+        // optimize
         path = SimplifyPath(path);
         return path;
     }
 
-    // Убирает лишние узлы, если точка лежит на прямой между соседями
+    // Remove unnecessary waypoints that are collinear
     private static List<Vector2> SimplifyPath(List<Vector2> raw)
     {
         if (raw.Count < 3) return raw;
@@ -105,7 +105,7 @@ public static class Pathfinder
 
     private static bool Collinear(Vector2 a, Vector2 b, Vector2 c)
     {
-        // проверка с небольшой погрешностью
+        // Area of triangle abc is zero
         float area = Mathf.Abs((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x));
         return area < 0.001f;
     }
@@ -135,21 +135,21 @@ public static class Pathfinder
 
     private static float Heuristic(Vector2 a, Vector2 b)
     {
-        return Vector2.Distance(a, b); // евклидова
+        return Vector2.Distance(a, b); 
     }
 
-    // Ищет ближайшую проходимую клетку в спирали (до некоторого радиуса)
+    // Searches for the nearest walkable cell around the given origin
     private static Vector2 FindNearbyWalkable(Vector2 origin)
     {
         float s = GridMap.Instance.cellSize;
-        int maxSteps = 6; // 6*cellSize radius (настраиваем)
+        int maxSteps = 6; // maximum search radius in cells
         for (int r = 1; r <= maxSteps; r++)
         {
             for (int dx = -r; dx <= r; dx++)
             {
                 for (int dy = -r; dy <= r; dy++)
                 {
-                    if (Mathf.Abs(dx) != r && Mathf.Abs(dy) != r) continue; // по периметру квадрата
+                    if (Mathf.Abs(dx) != r && Mathf.Abs(dy) != r) continue; // only check the perimeter
                     Vector2 candidate = origin + new Vector2(dx * s, dy * s);
                     if (GridMap.Instance.IsWalkable(candidate)) return candidate;
                 }

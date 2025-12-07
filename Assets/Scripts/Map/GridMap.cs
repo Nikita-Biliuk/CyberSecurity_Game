@@ -9,14 +9,14 @@ public class GridMap : MonoBehaviour
 
     [Header("Obstacles")]
     public LayerMask obstacleMask;
-    public float obstacleCheckRadiusFactor = 0.4f; // радиус = cellSize * factor
+    public float obstacleCheckRadiusFactor = 0.4f; // fraction of cellSize
 
     void Awake()
     {
         Instance = this;
     }
 
-    // Проверяет, можно ли встать в этой точке (центр клетки).
+    // Checks if the cell at worldPos is walkable (not blocked by obstacles)
     public bool IsWalkable(Vector2 worldPos)
     {
         float r = cellSize * obstacleCheckRadiusFactor;
@@ -24,7 +24,7 @@ public class GridMap : MonoBehaviour
         return !blocked;
     }
 
-    // Возвращает центр ближайшей ячейки для worldPos
+    // Converts world position to the center of the nearest grid cell
     public Vector2 WorldToCellCenter(Vector2 worldPos)
     {
         float x = Mathf.Round(worldPos.x / cellSize) * cellSize;

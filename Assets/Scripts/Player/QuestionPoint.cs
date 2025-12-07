@@ -19,7 +19,7 @@ public class QuestionPoint : MonoBehaviour
 
     private void OnQuestionAnswered(bool correct)
 {
-    // ✅ фиксируем результат до всего остального
+    // fixes double-callback issue
     GameManager.instance.RegisterAnswer(correct);
 
     if (correct)
@@ -30,7 +30,7 @@ public class QuestionPoint : MonoBehaviour
     }
     else
     {
-        // ⛔ НЕ пересоздаём новый callback — просто задаём вопрос заново без перезаписи
+        // ask again after a short delay
         Invoke(nameof(AskQuestionAgain), 0.1f);
     }
 }
