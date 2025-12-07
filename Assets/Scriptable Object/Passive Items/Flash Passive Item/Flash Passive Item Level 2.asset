@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6346a2552d7e62a45a937a2d9f091b8e, type: 3}
+  m_Name: Flash Passive Item Level 2
+  m_EditorClassIdentifier: 
+  multiplier: 125
+  level: 2
+  nextLevelPrefab: {fileID: 2488787921128718626, guid: 423a19ac1b3654f46a3f726c53ce14ba, type: 3}
+  name: USB Flash with Antivirus Level 2
+  description: A little bit strnoger antivirus
+  icon: {fileID: 21300000, guid: 928ec81a041e811488e316c6c5c23e10, type: 3}
