@@ -1,39 +1,91 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CharacterSelector : MonoBehaviour
 {
     public static CharacterSelector instance;
-    public CharacterScriptableObject characterData;
 
-    void Awake()
+    [Header("Selected Character")]
+    public CharacterScriptableObject characterData;
+    public bool characterSelected = false;
+
+    private string lastSelectedScene = ""; 
+
+    private void Awake()
     {
-        if(instance == null)
+        // Destroy duplicate instances
+        if (instance != null && instance != this)
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Debug.LogWarning("EXTRA" + this + "DELETED");
             Destroy(gameObject);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+        
+        // Subscribe to scene loaded event
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // If new scene is menu or title screen, reset selection
+        if (scene.name == "Menu" || 
+            scene.name == "Title Screen") 
+        {
+            ResetSelection();
+        }
+        // If new scene is not menu or title screen, save its name
+        else if (scene.name != "Title Screen" && 
+                 scene.name != "Menu")
+        {
+            lastSelectedScene = scene.name;
         }
     }
 
-    public static CharacterScriptableObject GetData()
+    public void ResetSelection()
     {
-        return instance.characterData;
+        characterData = null;
+        characterSelected = false;
+        Debug.Log("Character selection reset");
+    }
+
+    public void ReplaceCharacter(CharacterScriptableObject newCharacter)
+    {
+        characterData = newCharacter;
+        characterSelected = true;
+
     }
 
     public void SelectCharacter(CharacterScriptableObject character)
     {
         characterData = character;
+        characterSelected = true;
+        
+        // Save selection to PlayerPrefs
+
+        PlayerPrefs.Save();
+        
+
     }
 
-    public void DestroySingleton()
+    public static CharacterScriptableObject GetData()
     {
-        instance = null;
-        Destroy(gameObject);
+        if (instance == null)
+            return null;
+        return instance.characterData;
+    }
+
+    // New clearing method
+    public void ClearForMenu()
+    {
+
+        characterData = null;
+        characterSelected = false;
     }
 }

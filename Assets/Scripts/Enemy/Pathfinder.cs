@@ -12,7 +12,7 @@ public static class Pathfinder
         public Node(Vector2 p) { pos = p; g = float.PositiveInfinity; f = float.PositiveInfinity; parent = null; }
     }
 
-    // Given start and goal world positions, returns a list of waypoints from start to goal
+    // A* pathfinding from startWorld to goalWorld
     public static List<Vector2> FindPath(Vector2 startWorld, Vector2 goalWorld)
     {
         if (GridMap.Instance == null) return new List<Vector2>();
@@ -22,7 +22,7 @@ public static class Pathfinder
 
         if (!GridMap.Instance.IsWalkable(start)) 
         {
-            // When start is not walkable, try to find the nearest walkable cell
+            // find nearest walkable
             start = FindNearbyWalkable(start);
             if (start == Vector2.positiveInfinity) return new List<Vector2>();
         }
@@ -40,7 +40,7 @@ public static class Pathfinder
 
         while (open.Count > 0)
         {
-            // Find node in open list with lowest f
+            // get node in open with lowest f
             Node current = open[0];
             for (int i = 1; i < open.Count; i++)
                 if (open[i].f < current.f) current = open[i];
@@ -82,12 +82,11 @@ public static class Pathfinder
             cur = cur.parent;
         }
         path.Reverse();
-        // optimize
         path = SimplifyPath(path);
         return path;
     }
 
-    // Remove unnecessary waypoints that are collinear
+    // Delete collinear points
     private static List<Vector2> SimplifyPath(List<Vector2> raw)
     {
         if (raw.Count < 3) return raw;
@@ -138,18 +137,18 @@ public static class Pathfinder
         return Vector2.Distance(a, b); 
     }
 
-    // Searches for the nearest walkable cell around the given origin
+    // Find nearest walkable cell around origin
     private static Vector2 FindNearbyWalkable(Vector2 origin)
     {
         float s = GridMap.Instance.cellSize;
-        int maxSteps = 6; // maximum search radius in cells
+        int maxSteps = 6; // search radius
         for (int r = 1; r <= maxSteps; r++)
         {
             for (int dx = -r; dx <= r; dx++)
             {
                 for (int dy = -r; dy <= r; dy++)
                 {
-                    if (Mathf.Abs(dx) != r && Mathf.Abs(dy) != r) continue; // only check the perimeter
+                    if (Mathf.Abs(dx) != r && Mathf.Abs(dy) != r) continue; // only perimeter
                     Vector2 candidate = origin + new Vector2(dx * s, dy * s);
                     if (GridMap.Instance.IsWalkable(candidate)) return candidate;
                 }

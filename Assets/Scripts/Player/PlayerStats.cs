@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
+
 
 public class PlayerStats : MonoBehaviour
 {
@@ -119,9 +121,15 @@ public class PlayerStats : MonoBehaviour
 
     public GameObject firstPassiveItemTest, secondPassiveItemTest;
 
-    void Awake() {
-        characterData = CharacterSelector.GetData();
-        CharacterSelector.instance.DestroySingleton();
+    void Awake()
+    {
+        if (CharacterSelector.instance == null || CharacterSelector.instance.characterData == null)
+        {
+            Debug.LogError("CharacterData is NULL! Player tried to start the game without selecting a character.");
+            return;
+        }
+
+        characterData = CharacterSelector.instance.characterData;
 
         inventory = GetComponent<InventoryManager>();
 
@@ -134,6 +142,7 @@ public class PlayerStats : MonoBehaviour
 
         SpawnWeapon(characterData.StartingWeapon);
     }
+
 
     void Start() {
         experienceCap = levelRanges[0].experienceCapIncrease;

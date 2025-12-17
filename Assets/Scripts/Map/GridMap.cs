@@ -16,7 +16,7 @@ public class GridMap : MonoBehaviour
         Instance = this;
     }
 
-    // Checks if the cell at worldPos is walkable (not blocked by obstacles)
+    // Checks if the cell at worldPos is walkable (no obstacles)
     public bool IsWalkable(Vector2 worldPos)
     {
         float r = cellSize * obstacleCheckRadiusFactor;
@@ -24,7 +24,7 @@ public class GridMap : MonoBehaviour
         return !blocked;
     }
 
-    // Converts world position to the center of the nearest grid cell
+    // Convert world position to nearest cell center
     public Vector2 WorldToCellCenter(Vector2 worldPos)
     {
         float x = Mathf.Round(worldPos.x / cellSize) * cellSize;

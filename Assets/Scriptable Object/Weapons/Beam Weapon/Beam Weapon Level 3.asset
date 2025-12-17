@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Beam Weapon Level 3
   m_EditorClassIdentifier: 
   prefab: {fileID: 6572253930342253703, guid: cb6d3c5011c60534891d7ff80d86744f, type: 3}
-  damage: 5
+  damage: 10
   speed: 10
   cooldownDuration: 2
   pierce: 2
   level: 3
   nextLevelPrefab: {fileID: 0}
   name: Malware Beam Level 3
-  description: Beam pierce is increased
+  description: Beam pierce and damage is increased
   icon: {fileID: 21300000, guid: 7717484387ea68f4695f9938ffa432b2, type: 3}

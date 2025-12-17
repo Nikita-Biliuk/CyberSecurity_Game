@@ -19,7 +19,7 @@ public class QuestionPoint : MonoBehaviour
 
     private void OnQuestionAnswered(bool correct)
 {
-    // fixes double-callback issue
+    // forget the answer if already answered
     GameManager.instance.RegisterAnswer(correct);
 
     if (correct)
@@ -30,7 +30,7 @@ public class QuestionPoint : MonoBehaviour
     }
     else
     {
-        // ask again after a short delay
+        // Retry asking the question after a short delay
         Invoke(nameof(AskQuestionAgain), 0.1f);
     }
 }

@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Building.unity
     guid: 86031c3428a232d4cb5324574d2ed90e
+  - enabled: 1
+    path: Assets/Scenes/Questions.unity
+    guid: c7d30c25998d079468df51c392612b13
   m_configObjects: {}
